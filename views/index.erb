@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Simple Census Tract Map</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
+	<style>
+	body { margin:0; padding:0; }
+	#map { position:absolute; top:0; bottom:0; width:100%; }
+	</style>
+	
+</head>
+
+<body>
+	<div id='map'></div>
+	<script type="text/javascript">
+	L.mapbox.accessToken = 'pk.eyJ1IjoiZm1hMiIsImEiOiJkcmdtd0NjIn0.dw0I__cIjfXpz37Yj0DQmw';
+	var map = L.mapbox.map('map', 'fma2.m6jhdfik').setView([37.805, -122.259], 12);
+	$.ajax({
+		url: '/geojson',
+		data: $(this).serialize(),
+		dataType: "json",
+		success: function(data) {
+			for (i=0; i<data.length; i++) {
+				info = data[i].properties
+				coords = data[i].geometry.coordinates
+				L.mapbox.featureLayer({
+					type: 'Feature',
+					geometry: {
+						type: 'Point',
+						coordinates: [
+						coords[0],
+						coords[1]
+						]
+					},
+					properties: {
+						title: info.tract_name,
+						description: 'Population Density: ' + Math.round(info.population_density * 100) / 100 + '<br>' + 'Housing Density: ' + Math.round(info.housing_density * 100) / 100,
+						'marker-size': 'large',
+						'marker-color': '#BE9A6B',
+						// 'marker-symbol': 'star'
+					}
+				}).addTo(map);
+			}
+		}
+	});
+	</script>
+</body>
+
+</html>
