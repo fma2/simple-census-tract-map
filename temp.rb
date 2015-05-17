@@ -61,23 +61,82 @@ end
 
 def create_geojson(data)
 	geojson = data.map do |place|
-		{
-			type: 'Feature',
-			properties: {	
-				tract: place["Tract"],		
-				tract_name:	place["Name"],							
-				land_area:	place["Land Area"],						
-				water_area:	place["Water Area"],	
-				population:	place["Population"],						
-				housing_units:	place["Housing Units"],						
-				population_density:	place["Population Density"],						
-				housing_density:	place["Housing Density"]
-			},
-			geometry: {
-				type: 'Point',
-				coordinates: [place["Longitude"], place["Latitude"]]
+		if place["Densest Population Density"]
+			{
+				type: 'Feature',
+				geometry: {
+					type: 'Point',
+					coordinates: [place["Longitude"].to_f, place["Latitude"].to_f]
+				},
+				properties: {	
+					title: place["Name"],	
+					description: "Population Density: #{place['Population Density']} <br> Housing Density: #{place["Housing Density"]}",
+					# 'marker-size' => 'large',
+					'marker-color' => '#008B8B',
+					'marker-symbol' => 'star',
+
+					tract: place["Tract"],		
+					tract_name:	place["Name"],							
+					land_area:	place["Land Area"],						
+					water_area:	place["Water Area"],	
+					population:	place["Population"],						
+					housing_units:	place["Housing Units"],			
+					population_density:	place["Population Density"],						
+					housing_density:	place["Housing Density"],
+					densest: true,
+					sparsest: false
+					}
 			}
-		}
+		elsif place["Sparsest Population Density"]
+			{
+				type: 'Feature',
+				geometry: {
+					type: 'Point',
+					coordinates: [place["Longitude"].to_f, place["Latitude"].to_f]
+				},
+				properties: {	
+					title: place["Name"],	
+					description: "Population Density: #{place['Population Density']} <br> Housing Density: #{place["Housing Density"]}",
+					'marker-color' => '#00FFFF',
+					'marker-symbol' => 'star',
+					tract: place["Tract"],		
+					tract_name:	place["Name"],							
+					land_area:	place["Land Area"],						
+					water_area:	place["Water Area"],	
+					population:	place["Population"],						
+					housing_units:	place["Housing Units"],			
+					population_density:	place["Population Density"],						
+					housing_density:	place["Housing Density"],
+					densest: false,
+					sparsest: true
+					}
+			}
+		else
+			{
+				type: 'Feature',
+				geometry: {
+					type: 'Point',
+					coordinates: [place["Longitude"].to_f, place["Latitude"].to_f]
+				},
+				properties: {
+					title: place["Name"],	
+					description: "Population Density: #{place['Population Density']} <br> Housing Density: #{place["Housing Density"]}",
+					# 'marker-size' => 'large',
+					'marker-color' => '#DCDCDC',
+					tract: place["Tract"],		
+					tract_name:	place["Name"],							
+					land_area:	place["Land Area"],						
+					water_area:	place["Water Area"],	
+					population:	place["Population"],						
+					housing_units:	place["Housing Units"],			
+					population_density:	place["Population Density"],						
+					housing_density:	place["Housing Density"],
+					densest: false,
+					sparsest: false
+				}
+			}
+		end
 	end
+	geojson
 end
 
