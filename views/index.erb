@@ -19,7 +19,6 @@
 			font-size:9px;
 		}
 	</style>
-	
 </head>
 
 <body>
@@ -37,27 +36,27 @@
 	</div>
 	<div id='map'></div>
 	<script type="text/javascript">
-	L.mapbox.accessToken = 'pk.eyJ1IjoiZm1hMiIsImEiOiJkcmdtd0NjIn0.dw0I__cIjfXpz37Yj0DQmw';
-	var map = L.mapbox.map('map', 'fma2.m6jhdfik').setView([37.797, -122.25], 12);
-	map.legendControl.addLegend(document.getElementById('legend').innerHTML);
+		L.mapbox.accessToken = 'pk.eyJ1IjoiZm1hMiIsImEiOiJkcmdtd0NjIn0.dw0I__cIjfXpz37Yj0DQmw';
+		var map = L.mapbox.map('map', 'fma2.m6jhdfik').setView([37.797, -122.25], 12);
+		map.legendControl.addLegend(document.getElementById('legend').innerHTML);
 
-	var censusPlacesLayer = L.mapbox.featureLayer().addTo(map);
+		var censusPlacesLayer = L.mapbox.featureLayer().addTo(map);
 
-	$.ajax({
-		url: '/geojson',
-		data: $(this).serialize(),
-		dataType: "json",
-		success: function(data) {
-			censusPlacesLayer.setGeoJSON(data);
-		}
-	});
+		$.ajax({
+			url: '/geojson',
+			data: $(this).serialize(),
+			dataType: "json",
+			success: function(data) {
+				censusPlacesLayer.setGeoJSON(data);
+			}
+		});
 
-	censusPlacesLayer.on('mouseover', function(e) {
-		e.layer.openPopup();
-	});
-	censusPlacesLayer.on('mouseout', function(e) {
-		e.layer.closePopup();
-	});
+		censusPlacesLayer.on('mouseover', function(e) {
+			e.layer.openPopup();
+		});
+		censusPlacesLayer.on('mouseout', function(e) {
+			e.layer.closePopup();
+		});
 	</script>
 </body>
 
